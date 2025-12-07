@@ -480,7 +480,8 @@ document.getElementById('rom-form').addEventListener('submit', async function (e
 
     // Generate folder name from ROM name
     const folderName = romName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
-    const basePath = `assets/Roms/${folderName}`;
+    const uploadPath = `assets/Roms/${folderName}`; // Path for uploading files to GitHub
+    const jsonPath = `Roms/${folderName}`; // Path stored in JSON
 
     // Build ROM object
     const romData = {
@@ -490,9 +491,9 @@ document.getElementById('rom-form').addEventListener('submit', async function (e
         gapps: hasGapps,
         date: romDate,
         developer: developer,
-        coverPhoto: `${basePath}/cover.jpg`,
+        coverPhoto: `${jsonPath}/cover.jpg`,
         changelog: getFieldValues('changelog'),
-        screenshots: screenshotImages.map((_, i) => `${basePath}/${i + 1}.jpg`),
+        screenshots: screenshotImages.map((_, i) => `${jsonPath}/${i + 1}.jpg`),
         downloadUrl: downloadUrl,
         supportGroup: supportGroup,
         donateUrl: donateUrl,
@@ -515,7 +516,7 @@ document.getElementById('rom-form').addEventListener('submit', async function (e
     const orderedRomData = reorderProperties(romData, currentRomType);
 
     // Start upload process
-    await uploadRomToGitHub(orderedRomData, basePath);
+    await uploadRomToGitHub(orderedRomData, uploadPath);
 });
 
 async function uploadRomToGitHub(romData, basePath) {
