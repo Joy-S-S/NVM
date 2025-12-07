@@ -15,22 +15,13 @@ const GITHUB_CONFIG = {
 // ==========================================
 // DEVELOPER KEYS CONFIGURATION
 // Add your developer keys here
-// Format: { "secret_key": { name: "display_name", token: "github_personal_access_token" } }
+// Format: { "secret_key": "display_name" }
+// Tokens are now entered via the login form for security
 // ==========================================
 const DEVELOPER_KEYS = {
-    "Jo231Mitu..#": {
-        name: "Joy",
-        token: "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"
-    },
-    "Q7f@L9xP": {
-        name: "nathanzero00",
-        token: "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"
-    },
-    "mR3#tV8K": {
-        name: "noticesa",
-        token: "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"
-    }
-    // Add more developer keys as needed
+    "Jo231Mitu..#": "Joy",
+    "Q7f@L9xP": "nathanzero00",
+    "mR3#tV8K": "noticesa"
 };
 
 // ==========================================
@@ -47,9 +38,10 @@ let myRoms = { custom: [], ported: [] };
 // ==========================================
 // LOGIN FUNCTIONALITY
 // ==========================================
-function togglePasswordVisibility() {
-    const input = document.getElementById('secret-key');
-    const icon = document.querySelector('.toggle-password i');
+function togglePasswordVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    const button = input.parentElement.querySelector('.toggle-password');
+    const icon = button.querySelector('i');
 
     if (input.type === 'password') {
         input.type = 'text';
@@ -66,19 +58,20 @@ document.getElementById('login-form').addEventListener('submit', async function 
     e.preventDefault();
 
     const secretKey = document.getElementById('secret-key').value.trim();
+    const githubToken = document.getElementById('github-token').value.trim();
     const errorDiv = document.getElementById('login-error');
 
-    if (DEVELOPER_KEYS[secretKey]) {
-        const devData = DEVELOPER_KEYS[secretKey];
-        currentDeveloper = devData.name;
-        currentDeveloperToken = devData.token;
+    // Check if token is provided
+    if (!githubToken) {
+        errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>Please enter your GitHub token.</span>';
+        errorDiv.style.display = 'flex';
+        document.getElementById('github-token').classList.add('error');
+        return;
+    }
 
-        // Check if token is configured
-        if (!currentDeveloperToken) {
-            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>GitHub token not configured for this developer.</span>';
-            errorDiv.style.display = 'flex';
-            return;
-        }
+    if (DEVELOPER_KEYS[secretKey]) {
+        currentDeveloper = DEVELOPER_KEYS[secretKey];
+        currentDeveloperToken = githubToken;
 
         document.getElementById('developer-name').textContent = currentDeveloper;
         document.getElementById('developer-input').value = currentDeveloper;
@@ -105,6 +98,7 @@ function logout() {
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('developer-dashboard').style.display = 'none';
     document.getElementById('secret-key').value = '';
+    document.getElementById('github-token').value = '';
     document.getElementById('rom-form').reset();
     document.getElementById('json-output-section').style.display = 'none';
 
