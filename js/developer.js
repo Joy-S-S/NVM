@@ -114,6 +114,10 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
         errorDiv.style.display = 'none';
 
+        // Save credentials to localStorage for next time
+        localStorage.setItem('devPortal_secretKey', secretKey);
+        localStorage.setItem('devPortal_githubToken', githubToken);
+
         // Load developer's ROMs
         await loadMyRoms();
     } else {
@@ -121,6 +125,19 @@ document.getElementById('login-form').addEventListener('submit', async function 
         errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>Invalid secret key. Please try again.</span>';
         errorDiv.style.display = 'flex';
         document.getElementById('secret-key').classList.add('error');
+    }
+});
+
+// Load saved credentials from localStorage on page load
+document.addEventListener('DOMContentLoaded', function () {
+    const savedKey = localStorage.getItem('devPortal_secretKey');
+    const savedToken = localStorage.getItem('devPortal_githubToken');
+
+    if (savedKey) {
+        document.getElementById('secret-key').value = savedKey;
+    }
+    if (savedToken) {
+        document.getElementById('github-token').value = savedToken;
     }
 });
 
