@@ -3959,7 +3959,6 @@ select:focus-visible {
 
 .my-rom-item:hover {
     border-color: var(--primary-color);
-    transform: translateX(4px);
 }
 
 .my-rom-item img {
@@ -4062,4 +4061,5 @@ select:focus-visible {
         font-size: 0.75rem;
         flex-wrap: wrap;
     }
+
 }
