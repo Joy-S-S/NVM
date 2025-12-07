@@ -20,7 +20,7 @@ const GITHUB_CONFIG = {
 const DEVELOPER_KEYS = {
     "Jo231Mitu..#": {
         name: "Joy",
-        token: "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"
+        token: "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"
     },
     "Q7f@L9xP": {
         name: "nathanzero00",
@@ -766,3 +766,4 @@ function copyJsonToClipboard() {
         alert('Failed to copy to clipboard. Please select and copy manually.');
     });
 }
+
