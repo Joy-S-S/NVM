@@ -307,10 +307,13 @@ function refreshScreenshotPreviews() {
 async function githubApiRequest(endpoint, method = 'GET', body = null) {
     const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}${endpoint}`;
 
+    // Use Bearer for fine-grained PATs (github_pat_*), token for classic PATs
+    const authScheme = currentDeveloperToken.startsWith('github_pat_') ? 'Bearer' : 'token';
+
     const options = {
         method: method,
         headers: {
-            'Authorization': `token ${currentDeveloperToken}`,
+            'Authorization': `${authScheme} ${currentDeveloperToken}`,
             'Accept': 'application/vnd.github.v3+json',
             'Content-Type': 'application/json'
         }
