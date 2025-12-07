@@ -29,7 +29,16 @@
                     <label for="secret-key">Secret Key</label>
                     <div class="dev-password-input">
                         <input type="password" id="secret-key" placeholder="Enter your developer key" required>
-                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('secret-key')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="dev-input-group">
+                    <label for="github-token">GitHub Token</label>
+                    <div class="dev-password-input">
+                        <input type="password" id="github-token" placeholder="Enter your GitHub Personal Access Token" required>
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('github-token')">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
