@@ -25,6 +25,30 @@ const DEVELOPER_KEYS = {
 };
 
 // ==========================================
+// DEVELOPER LINKS CONFIGURATION
+// Editable support and donation links per developer
+// ==========================================
+const DEVELOPER_LINKS = {
+    "nathanzero00": {
+        supportGroup: "http://t.me/nathandmstrdisc",
+        donateUrl: "https://t.me/nathanzero00/191"
+    },
+    "noticesa": {
+        supportGroup: "http://t.me/noticesaa",
+        donateUrl: "https://t.me/itseunbinn/902"
+    }
+    // Add more developer links as needed
+};
+
+// Wait time in milliseconds after upload/delete operations (1 min 30 sec = 90000ms)
+const OPERATION_WAIT_TIME = 90000;
+
+// Helper function to wait
+function waitForRateLimit(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// ==========================================
 // STATE MANAGEMENT
 // ==========================================
 let currentRomType = 'custom';
@@ -81,6 +105,12 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
         // Set today's date as default
         document.getElementById('rom-date').valueAsDate = new Date();
+
+        // Auto-fill support and donation URLs if configured for this developer
+        if (DEVELOPER_LINKS[currentDeveloper]) {
+            document.getElementById('support-group').value = DEVELOPER_LINKS[currentDeveloper].supportGroup;
+            document.getElementById('donate-url').value = DEVELOPER_LINKS[currentDeveloper].donateUrl;
+        }
 
         errorDiv.style.display = 'none';
 
@@ -573,7 +603,11 @@ async function uploadRomToGitHub(romData, basePath) {
         );
 
         // Success!
-        showStatus('ROM uploaded successfully!', 'success');
+        showStatus('ROM uploaded successfully! Waiting 90 seconds before next operation...', 'success');
+
+        // Wait before allowing next operation to avoid GitHub rate limits
+        await waitForRateLimit(OPERATION_WAIT_TIME);
+        showStatus('Ready for next operation', 'success');
 
         // Show JSON output section with success message
         document.getElementById('json-output').textContent = JSON.stringify(romData, null, 4);
@@ -684,7 +718,11 @@ async function deleteRomFromGitHub(rom, romType) {
             );
         }
 
-        showStatus('ROM deleted successfully!', 'success');
+        showStatus('ROM deleted successfully! Waiting 90 seconds before next operation...', 'success');
+
+        // Wait before allowing next operation to avoid GitHub rate limits
+        await waitForRateLimit(OPERATION_WAIT_TIME);
+        showStatus('Ready for next operation', 'success');
 
         // Refresh my ROMs list
         await loadMyRoms();
