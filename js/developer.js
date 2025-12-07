@@ -745,22 +745,3 @@ function hideStatus() {
         statusDiv.style.display = 'none';
     }
 }
-
-function copyJsonToClipboard() {
-    const jsonText = document.getElementById('json-output').textContent;
-    navigator.clipboard.writeText(jsonText).then(() => {
-        const btn = document.querySelector('.copy-json-btn');
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        btn.classList.add('copied');
-
-        setTimeout(() => {
-            btn.innerHTML = originalHTML;
-            btn.classList.remove('copied');
-        }, 2000);
-    }).catch(err => {
-        console.error('Failed to copy:', err);
-        alert('Failed to copy to clipboard. Please select and copy manually.');
-    });
-}
-
