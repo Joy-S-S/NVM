@@ -483,9 +483,9 @@ function displayMyRoms() {
 
     container.innerHTML = roms.map(rom => `
         <div class="my-rom-item" data-id="${rom.id}">
-            <img src="https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${rom.coverPhoto}" 
+            <img src="https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/assets/${rom.coverPhoto}" 
                  alt="${rom.name}" 
-                 onerror="this.src='../assets/placeholder.jpg'">
+                 onerror="this.src='../assets/cover.jpg'">
             <div class="my-rom-info">
                 <h4>${rom.name}</h4>
                 <span class="my-rom-meta">
@@ -702,18 +702,20 @@ async function deleteRomFromGitHub(rom, romType) {
     try {
         showStatus(`Deleting ${rom.name}...`, 'loading');
 
-        // Step 1: Delete images
+        // Step 1: Delete images (add assets/ prefix since files are in assets/Roms/)
         // Delete cover
-        const coverInfo = await getFileContent(rom.coverPhoto);
+        const coverPath = `assets/${rom.coverPhoto}`;
+        const coverInfo = await getFileContent(coverPath);
         if (coverInfo) {
-            await deleteFile(rom.coverPhoto, `Delete cover for ${rom.name}`, coverInfo.sha);
+            await deleteFile(coverPath, `Delete cover for ${rom.name}`, coverInfo.sha);
         }
 
         // Delete screenshots
         for (const screenshot of rom.screenshots) {
-            const screenshotInfo = await getFileContent(screenshot);
+            const screenshotPath = `assets/${screenshot}`;
+            const screenshotInfo = await getFileContent(screenshotPath);
             if (screenshotInfo) {
-                await deleteFile(screenshot, `Delete screenshot for ${rom.name}`, screenshotInfo.sha);
+                await deleteFile(screenshotPath, `Delete screenshot for ${rom.name}`, screenshotInfo.sha);
             }
         }
 
