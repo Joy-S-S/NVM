@@ -353,7 +353,16 @@ async function getFileContent(path) {
     }
 }
 
+
 async function uploadFile(path, content, message, sha = null) {
+    // If no SHA provided, check if file already exists and get its SHA
+    if (!sha) {
+        const existingFile = await getFileContent(path);
+        if (existingFile) {
+            sha = existingFile.sha;
+        }
+    }
+
     const body = {
         message: message,
         content: content,
@@ -471,7 +480,7 @@ document.getElementById('rom-form').addEventListener('submit', async function (e
 
     // Generate folder name from ROM name
     const folderName = romName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
-    const basePath = `Roms/${folderName}`;
+    const basePath = `assets/Roms/${folderName}`;
 
     // Build ROM object
     const romData = {
